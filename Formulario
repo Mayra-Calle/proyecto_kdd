@@ -1,0 +1,65 @@
+import tkinter as tk
+from tkinter import messagebox
+import pandas as pd
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Formulario con DataFrame")
+ventana.geometry("400x400")
+
+# Lista para guardar los registros
+registros = []
+
+# Función para agregar datos al DataFrame
+def agregar_datos():
+    nombre = entry_nombre.get()
+    edad = entry_edad.get()
+    ciudad = entry_ciudad.get()
+
+    # Validar campos
+    if not nombre or not edad or not ciudad:
+        messagebox.showwarning("Advertencia", "Por favor, llena todos los campos")
+        return
+
+    try:
+        edad = int(edad)
+    except ValueError:
+        messagebox.showerror("Error", "La edad debe ser un número")
+        return
+
+    # Agregar los datos a la lista
+    registros.append({"Nombre": nombre, "Edad": edad, "Ciudad": ciudad})
+
+    # Crear el DataFrame
+    df = pd.DataFrame(registros)
+
+    # Mostrar en consola y mensaje
+    print(df)
+    messagebox.showinfo("Éxito", f"Datos agregados correctamente.\nTotal registros: {len(df)}")
+
+    # Limpiar campos
+    entry_nombre.delete(0, tk.END)
+    entry_edad.delete(0, tk.END)
+    entry_ciudad.delete(0, tk.END)
+
+# Etiquetas y campos del formulario
+tk.Label(ventana, text="Nombre:").pack(pady=5)
+entry_nombre = tk.Entry(ventana)
+entry_nombre.pack()
+
+tk.Label(ventana, text="Edad:").pack(pady=5)
+entry_edad = tk.Entry(ventana)
+entry_edad.pack()
+
+tk.Label(ventana, text="Ciudad:").pack(pady=5)
+entry_ciudad = tk.Entry(ventana)
+entry_ciudad.pack()
+
+# Botón para agregar
+tk.Button(ventana, text="Agregar", command=agregar_datos).pack(pady=10)
+
+# Botón para cerrar
+tk.Button(ventana, text="Salir", command=ventana.destroy).pack(pady=5)
+
+# Ejecutar la interfaz
+ventana.mainloop()
